@@ -1,10 +1,11 @@
 """
-Author: [Your Name]
-Date: [Current Date]
+Author: [Rina Feng]
+Date: [Oct 1st, 2026]
 Sources: [Any sources you use]
 """
 
 def load_words(file_path):
+
   """
   Loads words from a text file into a list.
   
@@ -35,6 +36,8 @@ def main():
   word_list = load_words("words.txt")
   
   # --- YOUR MENU-DRIVEN APPLICATION CODE WILL GO HERE ---
+
+  while True:
   
 if __name__ == "__main__":
   main()
