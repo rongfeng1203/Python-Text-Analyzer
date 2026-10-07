@@ -2,36 +2,59 @@
 Author: [Rina Feng]
 Date: [Oct 1st, 2026]
 Sources: [https://chatgpt.com/share/6ac3f542-fb44-83e9-9831-e42c5c667fbf]
-"""
-# Tasks (complete all in the same .py file):
 
-# 1. Create the function:
+Peer testing:
+Tester and date: Teske, Oct 7th, 2026
+Inputs tried and results: 
+Mixed-case palindromes and anagrams, passed
+loaded words.txt, filtered to length 5, found palindromes and anagrams, passed
+Empty strings, single-character palindromes, repeated letters, unequal lengths, and same-word exclusion, passed
+Feedback: None
+Changes made in response: None
+"""
+
 
 def is_palindrome(s):
-   #logic, if the string is same as the reverse, first and last character, then second and second last character, etc.
-  return s == s[::-1]
-  #simplified logic, when the string is reversed, if it is the same as the original, then it is a palindrome. If not, then it is not a palindrome.
+  """
+  Returns a boolean value corresponding to whether the String s is a palindrome or not.
+  Compares strings case-insensitively.
 
+  Args:
+    s: String to be tested
+
+  Returns:
+    boolean
+  """
+  s = s.lower()
+  # Compare the word with its reverse.
+  return s == s[::-1]
+
+  # Old logic:
     # for i in range(len(s) // 2): #cut half the string, and 
     #     if s[i] != s[-(i + 1)]:#check if the first and last character are the same, then second and second last character, etc.
     #         return False # if it immediately finds a character that is not the same, it will return false. Wait till the end to confirm whole thing is true  
 
     # return True
-# """
-#   Returns a boolean value corresponding to whether the String s is a palindrome or not.
-  
-#   Args:
-#     s: String to be tested
-  
-#   Returns:
-#     boolean
-#   """
 
-# 2. Create the function:
+
 def is_anagram(original, s):
-  return sorted(original) == sorted(s)
-   #simplified logic, if sorted original and sorted s are the same, then they are anagrams.
+  """
+  Returns a boolean value corresponding to whether the String s is an anagram or not.
+  Compares strings case-insensitively and requires a different letter order.
 
+  Args:
+    original: String that is to be compared against
+    s: String to be tested as a potential anagram of original
+
+  Returns:
+    boolean
+  """
+  original = original.lower()
+  s = s.lower()
+  # Sorting compares both the letters and how many times each occurs.
+  return original != s and sorted(original) == sorted(s)
+
+  # Old logic:
   # #logic, if the words are the same length, and if the letters in the words are the same, then they are anagrams
   # if len(original) != len(s):
   #   return False
@@ -46,76 +69,63 @@ def is_anagram(original, s):
 
   # return True
   #orrrrr
-  
-# """
-#   Returns a boolean value corresponding to whether the String s is an anagram or not.
-  
-#   Args:
-#     original: String that is to be compared against
-#     s: String to be tested as a potential anagram of original
-  
-#   Returns:
-#     boolean
-# """
 
-# 3. Create the function:
+
 def find_palindromes(word_list):
-  #for loop scanning every single word in the list
+  """
+  Finds all palindromes in a list of strings and displays them in the terminal.
+  Uses the is_palindrome() helper function.
+
+  Args:
+    word_list: A list of strings
+  """
   palindromes = []
   for word in word_list:
     if is_palindrome(word):
-      palindromes.append(word)#add to list 
+      palindromes.append(word)
 
   print(f"Palindromes found: {len(palindromes)}")
   print("\nHere they are:")
   for word in palindromes:
     print(word)
-  # """
-  # Finds all palindromes in a list of strings and displays them in the terminal. 
-  # Uses the is_palindrome() helper function.
-  
-  # Args:
-  #   word_list: A list of strings
-  # """
 
-# 4. Create the function:
+
 def find_anagrams(word_list, target):
+  """
+  Finds all anagrams in a list of strings and displays them in the terminal.
+  Uses the is_anagram() helper function.
+
+  Args:
+    word_list: A list of strings
+    target: Target string for potential anagrams to be compared with
+  """
   anagrams = []
   for word in word_list:
-    if word != target and is_anagram(target, word): #make sure the word itself is not included in the list of anagrams, and then check if it is an anagram
+    if is_anagram(target, word):
       anagrams.append(word)
   print(f"I found {len(anagrams)} Anagrams")
   for word in anagrams:
     print(word)
-  # """
-  # Finds all anagrams in a list of strings and displays them in the terminal. 
-  # Uses the is_anagram() helper function.
-  
-  # Args:
-  #   word_list: A list of strings
-  #   target: Target string for potential anagrams to be compared with
-  # """
 
 
-# 5. Create the function:
 def filter_by_length(word_list, length):
+  """
+  Returns a new list of strings after going through each item of the original list
+  to find any that are the same as the provided length.
+  Does not modify the original list.
+
+  Args:
+    word_list: A list of strings
+    length: The target length of the words to keep
+
+  Returns:
+    A new list of strings
+  """
   filtered_words = []
   for word in word_list:
     if len(word) == length:
       filtered_words.append(word)
   return filtered_words
-
-  # """
-  # Returns a new list of strings after going through each item of the original list 
-  # to find any that are the same as the provided length.
-  
-  # Args:
-  #   word_list: A list of strings
-  #   length: The target length of the words to keep
-  
-  # Returns:
-  #   A new list of strings
-  # """
 
 
 def load_words(file_path):
@@ -128,16 +138,20 @@ def load_words(file_path):
     
   Returns:
     A list of strings, where each string is a word from the file.
-    Returns an empty list if the file cannot be found.
+    Returns an empty list if the file is missing or unreadable.
   """
   try:
-    with open(file_path, 'r') as file:
+    with open(file_path, 'r', encoding='utf-8') as file:
       # Use a list comprehension for a concise way to read lines and strip whitespace
       words = [line.strip() for line in file]
     print(f"\nCurrently have {len(words)} words in memory.\n")
     return words
   except FileNotFoundError:
     print(f"Error: The file at {file_path} was not found.")
+    return []
+
+  except (OSError, UnicodeError):
+    print(f"Error: The file at {file_path} could not be read.")
     return []
 
 
@@ -148,14 +162,14 @@ def main():
   word_list = []
 
   while True:
-    print("Menu:")
-    print("1. Load words from file")
-    print("2. Filter by length")
-    print("3. Find palindromes")
-    print("4. Find anagrams")
-    print("5. Exit")
+    print("\nWord Analysis\n")
+    print("1 - Load/reload words from file")
+    print("2 - Update word list by word length")
+    print("3 - Find palindromes")
+    print("4 - Find anagrams")
+    print("5 - Quit")
 
-    choice = input("Enter your choice (1-5): ")
+    choice = input("> ").strip()
 
     if choice == '1':
       word_list = load_words("words.txt")
@@ -165,7 +179,7 @@ def main():
         print('List is empty. Choose "1" to load it.')
       else:
         try:
-          length = int(input("> "))
+          length = int(input("Which length words would you like to keep?\n> "))
         except ValueError:
           print("Please enter a positive whole number.")
           continue
@@ -189,11 +203,11 @@ def main():
       if not word_list:
         print('List is empty. Choose "1" to load it.')
       else:
-        target = input("Enter the target word for anagram search: ")
+        target = input("Enter the target word for anagram search: ").strip()
         find_anagrams(word_list, target)
 
     elif choice == '5':
-      print("Exiting the program.")
+      print("Thank you")
       break
 
     else:
